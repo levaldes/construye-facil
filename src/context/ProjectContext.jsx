@@ -1,11 +1,27 @@
 import React, { createContext, useContext, useState } from 'react';
-import { INITIAL_PROJECTS, INITIAL_RESOURCES } from '../services/mockData';
+import { INITIAL_PROJECTS, INITIAL_RESOURCES, USERS_MOCK } from '../services/mockData';
 
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState(INITIAL_PROJECTS);
   const [resources] = useState(INITIAL_RESOURCES);
+  const [user, setUser] = useState(null);
+
+  const login = (email, password) => {
+    const foundUser = USERS_MOCK.find(
+      u => u.email.toLowerCase() === email.toLowerCase() && u.pass === password
+    );
+    if (foundUser) {
+      setUser(foundUser);
+      return { success: true };
+    }
+    return { success: false, message: 'Correo o contraseña incorrectos.' };
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
 
   const addProgress = (projectId, progressValue) => {
     if (projectId === 'PR002') {
@@ -13,9 +29,7 @@ export const ProjectProvider = ({ children }) => {
     }
 
     const targetProject = projects.find(p => p.id === projectId);
-    if (!targetProject) {
-      return { success: false, message: 'Proyecto no encontrado' };
-    }
+    if (!targetProject) return { success: false, message: 'Proyecto no encontrado' };
 
     if (targetProject.progress + progressValue > 100) {
       return {
@@ -32,15 +46,14 @@ export const ProjectProvider = ({ children }) => {
     });
 
     setProjects(updatedProjects);
-    const newProgress = targetProject.progress + progressValue;
     return {
       success: true,
-      message: `Avance diario registrado correctamente. El avance total del proyecto aumentó al ${newProgress}%.`
+      message: `Avance registrado. El nuevo avance es ${targetProject.progress + progressValue}%.`
     };
   };
 
   return (
-    <ProjectContext.Provider value={{ projects, resources, addProgress }}>
+    <ProjectContext.Provider value={{ projects, resources, user, login, logout, addProgress }}>
       {children}
     </ProjectContext.Provider>
   );

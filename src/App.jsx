@@ -1,28 +1,34 @@
-import React, { useState } from 'react';
-import { ProjectProvider } from './context/ProjectContext';
-import { Header } from './components/Header';
-import { HomeView } from './views/HomeView';
+import React from 'react';
+import { ProjectProvider, useProjects } from './context/ProjectContext';
+import { LoginView } from './views/LoginView';
 import { AdminView } from './views/AdminView';
 import { SiteView } from './views/SiteView';
 import { EngineerView } from './views/EngineerView';
 import { ClientView } from './views/ClientView';
 
-export function App() {
-  const [currentRole, setCurrentRole] = useState(null);
+function MainApp() {
+  const { user } = useProjects();
 
+  if (!user) {
+    return <LoginView />;
+  }
+
+  return (
+    <>
+      {user.role === 'admin' && <AdminView />}
+      {user.role === 'jefe' && <SiteView />}
+      {user.role === 'ingeniero' && <EngineerView />}
+      {user.role === 'cliente' && <ClientView />}
+    </>
+  );
+}
+
+export function App() {
   return (
     <ProjectProvider>
       <div className="app-viewport">
-        <div className="container-lg my-auto">
-          {currentRole && (
-            <Header onBack={() => setCurrentRole(null)} showBackButton={true} />
-          )}
-
-          {!currentRole && <HomeView onSelectRole={(role) => setCurrentRole(role)} />}
-          {currentRole === 'admin' && <AdminView />}
-          {currentRole === 'jefe' && <SiteView />}
-          {currentRole === 'ingeniero' && <EngineerView />}
-          {currentRole === 'cliente' && <ClientView />}
+        <div className="container-lg my-auto py-4">
+          <MainApp />
         </div>
       </div>
     </ProjectProvider>

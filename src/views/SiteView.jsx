@@ -2,75 +2,122 @@ import React, { useState } from 'react';
 import { useProjects } from '../context/ProjectContext';
 
 export const SiteView = () => {
-  const { projects, addProgress } = useProjects();
-  const [selectedProject, setSelectedProject] = useState('');
-  const [advance, setAdvance] = useState('');
-  const [resource, setResource] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [comments, setComments] = useState('');
+  const { projects, resources, addProgress } = useProjects();
+
+  const [selectedProject, setSelectedProject] = useState('PR001');
+  const [advanceProgress, setAdvanceProgress] = useState('');
+  const [selectedResource, setSelectedResource] = useState('RE001');
+  const [resourceQuantity, setResourceQuantity] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const result = addProgress(selectedProject, parseInt(advance, 10));
 
+    const progressValue = parseFloat(advanceProgress);
+    if (isNaN(progressValue) || progressValue <= 0) {
+      alert('Por favor ingrese un porcentaje de avance válido.');
+      return;
+    }
+
+    // Lógica del contexto
+    const result = addProgress(selectedProject, progressValue);
+    
+    // Dispara la alerta con el resultado del backend/contexto
     alert(result.message);
 
+    // Si fue exitoso, resetea el formulario (limpia los campos)
     if (result.success) {
-      setAdvance('');
-      setResource('');
-      setQuantity('');
-      setComments('');
+      setAdvanceProgress('');
+      setResourceQuantity('');
     }
   };
 
   return (
-    <div className="card shadow-sm p-4 border-0">
-      <h4 className="text-warning fw-bold mb-4">Registro Diario de Terreno (Capataz / Jefe de Obra)</h4>
+    <div className="card border-0 shadow-sm p-4 rounded-4 bg-white">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <span className="badge bg-warning-subtle text-warning-emphasis fw-bold px-3 py-2 rounded-pill small mb-2">
+            Módulo de Terreno
+          </span>
+          <h3 className="fw-bold text-dark mb-0">Registro Diario de Terreno</h3>
+        </div>
+      </div>
 
       <div className="row g-4">
-        <div className="col-md-7">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label fw-bold">Proyecto:</label>
-              <select className="form-select" value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)} required>
-                <option value="">-- Seleccionar --</option>
-                {projects.map(p => (
-                  <option key={p.id} value={p.id}>{p.id} - {p.name}</option>
+        <div className="col-md-6">
+          <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+            <div>
+              <label htmlFor="select-proyecto" className="form-label fw-bold small">Proyecto:</label>
+              <select
+                id="select-proyecto"
+                className="form-select"
+                value={selectedProject}
+                onChange={(e) => setSelectedProject(e.target.value)}
+              >
+                {projects.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.id})
+                  </option>
                 ))}
               </select>
             </div>
 
-            <div className="mb-3">
-              <label className="form-label fw-bold">Avance Físico del Día (%):</label>
-              <input type="number" className="form-control" min="1" max="100" value={advance} onChange={(e) => setAdvance(e.target.value)} placeholder="Ej: 5" required />
+            <div>
+              <label htmlFor="input-avance" className="form-label fw-bold small">Porcentaje de Avance (%):</label>
+              <input
+                id="input-avance"
+                type="number"
+                className="form-control"
+                placeholder="Ej: 5"
+                value={advanceProgress}
+                onChange={(e) => setAdvanceProgress(e.target.value)}
+                required
+              />
             </div>
 
-            <div className="mb-3">
-              <label className="form-label fw-bold">Recurso Consumido:</label>
-              <select className="form-select" value={resource} onChange={(e) => setResource(e.target.value)} required>
-                <option value="">-- Seleccionar Recurso --</option>
-                <option value="RE001">RE001 - Maestro de obra (Jornada)</option>
-                <option value="RE002">RE002 - Ayudante (Jornada)</option>
-                <option value="RE003">RE003 - Cemento 25kg (Saco)</option>
+            <div>
+              <label htmlFor="select-recurso" className="form-label fw-bold small">Recurso Consumido:</label>
+              <select
+                id="select-recurso"
+                className="form-select"
+                value={selectedResource}
+                onChange={(e) => setSelectedResource(e.target.value)}
+              >
+                {resources.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
               </select>
             </div>
 
-            <div className="mb-3">
-              <label className="form-label fw-bold">Cantidad Consumida:</label>
-              <input type="number" className="form-control" min="1" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Ej: 10" required />
+            <div>
+              <label htmlFor="input-recurso" className="form-label fw-bold small">Cantidad Utilizada:</label>
+              <input
+                id="input-recurso"
+                type="number"
+                className="form-control"
+                placeholder="Ej: 10"
+                value={resourceQuantity}
+                onChange={(e) => setResourceQuantity(e.target.value)}
+              />
             </div>
 
-            <div className="mb-3">
-              <label className="form-label fw-bold">Observaciones de la Jornada:</label>
-              <textarea className="form-control" rows="3" maxLength="150" value={comments} onChange={(e) => setComments(e.target.value)} placeholder="Avances, clima o incidencias de terreno..."></textarea>
-            </div>
-
-            <button type="submit" className="btn btn-warning text-white w-100 fw-bold">GUARDAR REGISTRO DIARIO</button>
+            <button type="submit" className="btn btn-warning w-100 fw-bold py-2 mt-2">
+              GUARDAR REGISTRO DIARIO
+            </button>
           </form>
         </div>
 
-        <div className="col-md-5">
-          <img src="https://almozara2000.es/wp-content/uploads/2019/05/Portada_Almozara2000.jpg" alt="Terreno" className="img-fluid rounded h-100 object-fit-cover" />
+        <div className="col-md-6 d-flex justify-content-center align-items-center">
+          <div className="text-center">
+            <img
+              src="/Portada_Almozara2000.jpg"
+              alt="Terreno"
+              className="img-fluid rounded-4 shadow-sm"
+              style={{ maxHeight: '280px', objectFit: 'cover' }}
+            />
+            <p className="text-muted extra-small mt-2 mb-0">Vista previa de la obra en ejecucion</p>
+          </div>
         </div>
       </div>
     </div>

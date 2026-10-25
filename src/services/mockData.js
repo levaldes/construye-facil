@@ -32,3 +32,10 @@ export const INITIAL_RESOURCES = [
   { id: 'RE002', type: 'Mano de obra', description: 'Ayudante de obra', unit: 'Jornada', cost: '$25.000', status: 'Activo' },
   { id: 'RE003', type: 'Materiales', description: 'Cemento 25kg alta resistencia', unit: 'Saco', cost: '$6.500', status: 'Activo' }
 ];
+
+export const USERS_MOCK = [
+  { email: 'admin@construyefacil.cl', pass: '1234', role: 'admin', name: 'Carlos Administrador' },
+  { email: 'capataz@construyefacil.cl', pass: '1234', role: 'jefe', name: 'Juan Capataz' },
+  { email: 'ingeniero@construyefacil.cl', pass: '1234', role: 'ingeniero', name: 'Elena Ingeniera' },
+  { email: 'cliente@inmobiliariasur.cl', pass: '1234', role: 'cliente', name: 'Inmobiliaria Sur' }
+];
