@@ -1,112 +1,69 @@
 import React from 'react';
+import { 
+  exportAdminConsolidated, 
+  exportEngineerAPU, 
+  exportClientStateOfPayment 
+} from '../services/excelService';
 
-export const SideBar = ({ isOpen, onClose, userName, userRole }) => {
+export const SideBar = ({ role, setVistaActual, isOpen, onClose, projects, resources }) => {
   if (!isOpen) return null;
 
-  const renderRoleActions = () => {
-    switch (userRole?.toLowerCase()) {
-      case 'admin':
-        return (
-          <div className="list-group list-group-flush">
-            <span className="text-warning extra-small fw-bold text-uppercase px-3 mb-2">Herramientas Administrador</span>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📊 Exportar Matriz Consolidada
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              ⚠️ Ver Alertas Presupuestarias
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              👥 Gestión de Usuarios
-            </button>
-          </div>
-        );
-      case 'jefe':
-      case 'capataz':
-        return (
-          <div className="list-group list-group-flush">
-            <span className="text-warning extra-small fw-bold text-uppercase px-3 mb-2">Herramientas Terreno</span>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📝 Nuevo Registro de Avance
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📦 Solicitud de Materiales
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📋 Bitácora Digital
-            </button>
-          </div>
-        );
-      case 'ingeniero':
-        return (
-          <div className="list-group list-group-flush">
-            <span className="text-warning extra-small fw-bold text-uppercase px-3 mb-2">Gestión Técnica APU</span>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📐 Catálogo de Recursos
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📊 Exportar Precios (.xlsx)
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📥 Importar Tarifario
-            </button>
-          </div>
-        );
-      case 'cliente':
-        return (
-          <div className="list-group list-group-flush">
-            <span className="text-warning extra-small fw-bold text-uppercase px-3 mb-2">Portal Transparencia</span>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              📄 Certificado de Avance Oficial
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              🖼️ Avances Fotográficos
-            </button>
-            <button className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6">
-              💬 Contactar Inspección Técnica
-            </button>
-          </div>
-        );
-      default:
-        return null;
+  // export por rol
+  const handleExportarSegunRol = () => {
+    if (role === 'admin') {
+      exportAdminConsolidated(projects);
+    } else if (role === 'ingeniero' || role === 'engineer') {
+      exportEngineerAPU(resources);
+    } else if (role === 'cliente' || role === 'client') {
+      exportClientStateOfPayment(projects?.[0]);
     }
+    if (typeof onClose === 'function') onClose();
+  };
+
+  // cambio vista y cerrar sidebar
+  const irA = (vista) => {
+    if (typeof setVistaActual === 'function') setVistaActual(vista);
+    if (typeof onClose === 'function') onClose();
   };
 
   return (
     <div 
-      className="position-fixed top-0 start-0 w-100 h-100" 
-      style={{ zIndex: 1050, backgroundColor: 'rgba(15, 23, 42, 0.65)' }}
-      onClick={onClose}
+      className="bg-dark text-white p-3 position-fixed top-0 start-0 h-100 shadow-lg"
+      style={{ width: '260px', zIndex: 1050, paddingTop: '70px' }}
     >
-      <div 
-        className="bg-dark text-white h-100 p-4 d-flex flex-column justify-content-between shadow-lg"
-        style={{ width: '320px' }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div>
-          <div className="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary">
-            <div className="d-flex align-items-center gap-2">
-              <span className="fs-3">🏗️</span>
-              <h5 className="fw-bold text-warning mb-0">Panel del Sistema</h5>
-            </div>
-            <button className="btn-close btn-close-white" onClick={onClose}></button>
-          </div>
+      <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2 border-secondary">
+        <h6 className="text-uppercase text-warning fw-bold mb-0">Navegación</h6>
+        <button className="btn-close btn-close-white btn-sm" onClick={onClose}></button>
+      </div>
 
-          <div className="p-3 bg-secondary bg-opacity-25 rounded-3 mb-4 border border-secondary">
-            <small className="text-warning fw-bold text-uppercase d-block extra-small">Sesión Activa</small>
-            <h6 className="fw-bold text-white mb-1">Bienvenido/a, {userName || 'Usuario'}</h6>
-            <span className="badge bg-warning text-dark extra-small text-uppercase">
-              Rol: {userRole || 'General'}
-            </span>
-          </div>
+      <div className="list-group list-group-flush gap-1">
+        {/* Ir al dashboard */}
+        <button 
+          className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6 text-start"
+          onClick={() => irA('dashboard')}
+        >
+          📊 Panel Principal
+        </button>
 
-          {renderRoleActions()}
-        </div>
+        {/*descarga rportes*/}
+        <button 
+          className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6 text-start"
+          onClick={handleExportarSegunRol}
+        >
+          📥 Descargar Excel (.xlsx)
+        </button>
 
-        <div className="pt-3 border-top border-secondary text-center">
-          <p className="extra-small text-muted mb-0">
-            ConstruyeFácil v2.0 • 2026
-          </p>
-        </div>
+        {/*soporte tecnico*/}
+        <button 
+          className="list-group-item list-group-item-action bg-transparent text-light border-0 py-2 fs-6 text-start"
+          onClick={() => irA('soporte')}
+        >
+          🎧 Soporte Técnico
+        </button>
+      </div>
+
+      <div className="position-absolute bottom-0 start-0 p-3 w-100 border-top border-secondary text-center text-muted small">
+        ConstruyeFácil v2.4.0
       </div>
     </div>
   );

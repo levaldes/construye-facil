@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useProjects } from '../context/ProjectContext';
 import { MetricCard } from '../components/MetricCard';
+import { exportClientStateOfPayment } from '../services/excelService';
 
 export const ClientView = () => {
   const { projects, user } = useProjects();
@@ -9,11 +10,15 @@ export const ClientView = () => {
     user?.name || 'Inmobiliaria Sur'
   );
 
-  const handleSimulateExcel = (msg) => alert(`Módulo Excel: ${msg}`);
-
   const filteredProjects = projects.filter(
     (p) => p.client.toLowerCase() === selectedClient.toLowerCase()
   );
+
+  const handleExportExcel = () => {
+    // Toma el primer proyecto filtrado del cliente activo para generar su certificado
+    const currentProject = filteredProjects[0];
+    exportClientStateOfPayment(currentProject);
+  };
 
   return (
     <div className="card shadow-sm p-4 border-0">
@@ -47,7 +52,7 @@ export const ClientView = () => {
         <span className="fw-bold small">Certificado de Avance Oficial:</span>
         <button
           className="btn btn-info text-white btn-sm fw-bold"
-          onClick={() => handleSimulateExcel('Generando Estado de Pago (.xlsx)...')}
+          onClick={handleExportExcel}
         >
           Descargar Estado de Pago (.xlsx)
         </button>

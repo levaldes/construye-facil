@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SideBar } from './SideBar';
 
-export const Header = ({ userName, userRole, onLogout }) => {
+export const Header = ({ userName, userRole, onLogout, projectsData, setVistaActual }) => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   return (
@@ -35,7 +35,7 @@ export const Header = ({ userName, userRole, onLogout }) => {
               Construye<span className="text-warning">Fácil</span>
             </h4>
             <small className="text-muted">
-              {userName ? `${userName} (${userRole.toUpperCase()})` : 'Control & Gestión de Obras'}
+              {userName ? `${userName} (${userRole ? userRole.toUpperCase() : 'GENERAL'})` : 'Control & Gestión de Obras'}
             </small>
           </div>
         </div>
@@ -50,8 +50,9 @@ export const Header = ({ userName, userRole, onLogout }) => {
       <SideBar 
         isOpen={isSideBarOpen} 
         onClose={() => setIsSideBarOpen(false)} 
-        userName={userName} 
-        userRole={userRole} 
+        role={userRole} 
+        setVistaActual={setVistaActual}
+        projects={projectsData}
       />
     </>
   );

@@ -7,10 +7,12 @@ import { AdminView } from './views/AdminView';
 import { SiteView } from './views/SiteView';
 import { EngineerView } from './views/EngineerView';
 import { ClientView } from './views/ClientView';
+import { SupportView } from './views/SupportView';
 
 function MainApp() {
-  const { user, logout } = useProjects();
+  const { user, logout, projects } = useProjects();
   const [selectedRole, setSelectedRole] = useState(null);
+  const [vistaActual, setVistaActual] = useState('dashboard');
 
   useEffect(() => {
     const handlePopState = (event) => {
@@ -56,11 +58,24 @@ function MainApp() {
 
   return (
     <>
-      <Header userName={user.name} userRole={user.role} onLogout={logout} />
-      {user.role === 'admin' && <AdminView />}
-      {user.role === 'jefe' && <SiteView />}
-      {user.role === 'ingeniero' && <EngineerView />}
-      {user.role === 'cliente' && <ClientView />}
+      <Header 
+        userName={user.name} 
+        userRole={user.role} 
+        onLogout={logout} 
+        setVistaActual={setVistaActual}
+        projectsData={projects}
+      />
+
+      {vistaActual === 'soporte' ? (
+        <SupportView />
+      ) : (
+        <>
+          {user.role === 'admin' && <AdminView />}
+          {user.role === 'jefe' && <SiteView />}
+          {user.role === 'ingeniero' && <EngineerView />}
+          {user.role === 'cliente' && <ClientView />}
+        </>
+      )}
     </>
   );
 }

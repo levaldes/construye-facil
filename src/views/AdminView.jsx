@@ -1,12 +1,13 @@
 import React from 'react';
 import { useProjects } from '../context/ProjectContext';
 import { MetricCard } from '../components/MetricCard';
+import { exportAdminConsolidated } from '../services/excelService';
 
 export const AdminView = () => {
   const { projects } = useProjects();
 
-  const handleSimulateExcel = (msg) => {
-    alert(`Modulo Excel: ${msg}`);
+  const handleExportExcel = () => {
+    exportAdminConsolidated(projects);
   };
 
   return (
@@ -15,7 +16,7 @@ export const AdminView = () => {
 
       <div className="alert alert-success d-flex justify-content-between align-items-center mb-4">
         <span className="fw-bold small">Reportes Consolidados de la Empresa:</span>
-        <button className="btn btn-success btn-sm fw-bold" onClick={() => handleSimulateExcel('Exportando Matriz General (.xlsx)...')}>
+        <button className="btn btn-success btn-sm fw-bold" onClick={handleExportExcel}>
           Exportar Matriz General (.xlsx)
         </button>
       </div>
