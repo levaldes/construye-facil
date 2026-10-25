@@ -5,12 +5,12 @@ export const INITIAL_PROJECTS = [
     client: 'Inmobiliaria Sur',
     type: 'Vivienda',
     budget: '$350.000.000',
-    progress: 45,
+    progress: 88,
     status: 'En ejecución',
     startDate: '15 de Enero de 2026',
-    lastInspection: '05 de Septiembre de 2026',
-    estimatedDelivery: '30 de Octubre de 2026',
-    summary: 'Se ha concluido la etapa de hormigonado en los pisos inferiores. La obra avanza conforme a la planificación prevista.'
+    lastInspection: '15 de Octubre de 2026',
+    estimatedDelivery: '30 de Noviembre de 2026',
+    summary: 'Se ha completado la estructura principal y la fase de instalaciones. Se ejecutan los detalles finales y terminaciones en departamentos muestra.'
   },
   {
     id: 'PR002',
@@ -18,7 +18,7 @@ export const INITIAL_PROJECTS = [
     client: 'Corporación Educacional',
     type: 'Obra civil',
     budget: '$180.000.000',
-    progress: 10,
+    progress: 25,
     status: 'Planificado',
     startDate: '01 de Noviembre de 2026',
     lastInspection: 'N/A',

@@ -18,7 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px;
+  padding: 12px 20px;
 }
 
 /* Tarjeta de Bienvenida con sombra suave, sin bordes laterales molestos */
@@ -27,8 +27,8 @@ body {
   border: none !important;
   border-radius: 20px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-  padding: 3rem 2rem;
-  max-width: 800px;
+  padding: 2rem 2rem 1.5rem 2rem;
+  max-width: 850px;
   margin: 0 auto;
   width: 100%;
 }
@@ -37,8 +37,8 @@ body {
 .btn-primary-custom {
   background-color: #2563eb;
   border: none;
-  padding: 14px 32px;
-  font-size: 1rem;
+  padding: 12px 28px;
+  font-size: 0.95rem;
   font-weight: 600;
   border-radius: 12px;
   color: #ffffff;
@@ -50,4 +50,71 @@ body {
   background-color: #1d4ed8;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+/* Estilos de la portada con temática de construcción e industria */
+.bg-construction-hero {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border-top: 5px solid #f59e0b !important;
+}
+
+.text-warning-gradient {
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Marco para la imagen del dashboard en el hero */
+.hero-img-wrapper {
+  background: #0f172a;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  transition: transform 0.3s ease;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.hero-img-wrapper:hover {
+  transform: translateY(-3px);
+}
+
+/* Cajas de métricas del proyecto con acentos laterales */
+.metric-card-construction {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+}
+
+.metric-card-construction:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.border-blue { border-left: 5px solid #2563eb !important; }
+.border-green { border-left: 5px solid #16a34a !important; }
+.border-orange { border-left: 5px solid #d97706 !important; }
+.border-teal { border-left: 5px solid #0891b2 !important; }
+
+/* Botón principal de ingreso con efecto de hover de seguridad vial/industrial */
+.btn-hover-construction {
+  transition: all 0.25s ease;
+}
+
+.btn-hover-construction:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Tarjetas de selección de roles con acento superior de construcción */
+.card-role-construction {
+  border-radius: 18px !important;
+  border-top-width: 5px !important;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.card-role-construction:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
 }
